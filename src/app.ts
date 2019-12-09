@@ -11,7 +11,9 @@
 import express, { Application } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import {MutantsController} from "./mutants.controller";
+import {MONGO_URL} from "./constants/mutants.contants";
 
 class App {
   public app: Application;
@@ -21,6 +23,7 @@ class App {
   constructor() {
     this.app = express();
     this.setConfig();
+    this.setupMongo();
 
     // setup mutants controllers to handle requests
     this.mutantsController = new MutantsController(this.app);
@@ -35,6 +38,13 @@ class App {
 
     //Enables cors
     this.app.use(cors());
+  }
+
+  private setupMongo() {
+    mongoose.Promise = global.Promise;
+    mongoose.connect(MONGO_URL, {
+      useNewUrlParser: true
+    });
   }
 }
 
