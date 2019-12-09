@@ -4,3 +4,4 @@
  */
 
 export const PORT = 9001;
+export const APP_NAME = 'Mutants server';

@@ -3,13 +3,26 @@
   Author. Richard Ibarra Ramírez - richard.ibarra@gmail.com
  */
 
-
 import { Request, Response } from "express";
 import {isMutant} from "../mutants";
+import {APP_NAME} from "../constants/mutants.contants";
 
 export class MutantsService {
 
-  public index(req: Request, res: Response) {
+  public root(req: Request, res: Response)
+  {
+    // root for server
+    // -> returns plain text
+    res.status(200).send(APP_NAME);
+  }
+
+  public get(req: Request, res: Response)
+  {
+    // -> returns method not allowed
+    res.status(405).send('');
+  }
+
+  public post(req: Request, res: Response) {
 
     /*
       dna: string[]
