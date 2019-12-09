@@ -3,9 +3,10 @@
   Author. Richard Ibarra Ramírez - richard.ibarra@gmail.com
  */
 
-import mongoose from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 const MutantSchema = new mongoose.Schema({
-  dna: [String]
+  dna: [String],
+  isMutant: Boolean
 }, {
   timestamps: true
 });

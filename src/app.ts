@@ -15,15 +15,15 @@ import mongoose from 'mongoose';
 import {MutantsController} from "./mutants.controller";
 import {MONGO_URL} from "./constants/mutants.contants";
 
-class App {
+export default class App {
   public app: Application;
 
   public mutantsController: MutantsController;
 
-  constructor() {
+  constructor(mongoURL: string) {
     this.app = express();
     this.setConfig();
-    this.setupMongo();
+    this.setupMongo(mongoURL);
 
     // setup mutants controllers to handle requests
     this.mutantsController = new MutantsController(this.app);
@@ -40,12 +40,10 @@ class App {
     this.app.use(cors());
   }
 
-  private setupMongo() {
+  private setupMongo(mongoURL: string) {
     mongoose.Promise = global.Promise;
-    mongoose.connect(MONGO_URL, {
+    mongoose.connect(mongoURL, {
       useNewUrlParser: true
     });
   }
 }
-
-export default new App().app;

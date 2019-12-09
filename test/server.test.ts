@@ -6,13 +6,25 @@
 import { expect } from 'chai';
 import chai = require('chai');
 import chaiHttp = require('chai-http');
-import app from '../src/app';
+const { MongoMemoryServer } = require('mongodb-memory-server');
+import {Application} from "express";
+import App from "../src/app";
 
 // setup chai for testing
 chai.use(chaiHttp);
 chai.should();
 
 describe('App server', () => {
+
+  let app: Application;
+
+  before(async() => {
+    // setup mongo in memory server
+    const mongod = new MongoMemoryServer();
+    const mongoURL = await mongod.getConnectionString();
+
+    app = new App(mongoURL).app;
+  });
 
   describe('GET /', () => {
     it('root should return simple text', () => {
