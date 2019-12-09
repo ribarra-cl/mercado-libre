@@ -16,6 +16,6 @@ export class MutantsController {
   }
 
   public routes() {
-    this.app.route('/mutants/').get(this.mutantsService.index);
+    this.app.route('/mutants/').post(this.mutantsService.index);
   }
 }
