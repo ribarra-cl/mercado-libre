@@ -12,11 +12,18 @@ function isMutantAux(dna: string[], required: number, minimum: number) : boolean
   if(dna == null || dna.length == 0)
     return false;
 
-  // same length on  strings
   const firstRow = dna[0]; // we can access to first element since dna.length != 0
-  const sameLength = dna
-    .filter((value, index) => index > 0)
-    .every((row) => row.length == firstRow.length);
+
+  // check if array has same length as firstRow length
+  if(firstRow.length != dna.length)
+    return false;
+
+  // all rows excluding first one
+  const allButFirst = dna.filter((value, index) => index > 0);
+
+  const sameLength = allButFirst.every((row) => row.length == firstRow.length);
+
+  // every row should have same length as first one to be a matrix
   if(!sameLength)
     return false;
 

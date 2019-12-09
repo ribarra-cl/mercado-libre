@@ -14,6 +14,12 @@ describe('isMutant', () => {
     expect(result).to.be.false;
   });
 
+  it('single item array is not mutant', () =>
+  {
+    const result = isMutant(["ATCG"]);
+    expect(result).to.be.false;
+  });
+
   it('not matching array length is not mutant', () =>
   {
     const result = isMutant(["AT", "A"]);
