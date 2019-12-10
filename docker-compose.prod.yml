@@ -3,14 +3,11 @@
 # - https://github.com/aherve/typescript-express-docker
 
 web-server:
-  build: .
-  links:
-    - 'mongo:mongo'
-  expose:
-    - "8080"
-  ports:
-    - "8080:8080"
-    - "9229:9229"
+  volumes:
+    - ./dist:/app/dist/
+  environment:
+    - NODE_ENV=production
+  command: node /app/dist/index.js
 
 mongo:
   image: mongo:latest

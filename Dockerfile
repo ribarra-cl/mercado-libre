@@ -9,6 +9,6 @@ RUN npm ci
 
 USER node
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD [ "node", "dist/index.js" ]

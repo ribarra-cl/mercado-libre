@@ -4,6 +4,9 @@ exports.default = {
     allowedOrigins: [
         'https://your-site.com',
     ],
+    mongo: {
+        uri: 'mongodb://mongo/MercadoLibre'
+    },
     ip: process.env.IP || undefined,
     port: process.env.PORT || 8080,
 };
