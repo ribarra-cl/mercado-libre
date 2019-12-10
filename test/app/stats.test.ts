@@ -8,7 +8,7 @@ const chaiHttp = require('chai-http');
 import * as mongo from 'mongodb-memory-server';
 import app, { mongoConfig } from "../../src/app";
 import config from "../../src/config/environment";
-import {VALID_MATRICES} from "../../mocks/mutants.mock";
+import {INVALID_MATRICES, VALID_MATRICES} from "../../mocks/mutants.mock";
 
 // setup chai for testing
 chai.use(chaiHttp);
@@ -53,6 +53,18 @@ describe('APP /stats', () => {
       chai.expect(res.body).to.have.property('count_mutant_dna').to.be.equal(1);
       chai.expect(res.body).to.have.property('count_human_dna').to.be.equal(0);
       chai.expect(res.body).to.have.property('ratio').to.be.equal(0);
+
+      await chai.request(app)
+        .post('/mutants/')
+        .set('content-type', 'application/json')
+        .send({dna: INVALID_MATRICES.sample_0});
+
+      res = await chai.request(app).get('/stats/');
+
+      chai.expect(res).to.have.status(200);
+      chai.expect(res.body).to.have.property('count_mutant_dna').to.be.equal(1);
+      chai.expect(res.body).to.have.property('count_human_dna').to.be.equal(1);
+      chai.expect(res.body).to.have.property('ratio').to.be.equal(1);
 
     });
   });

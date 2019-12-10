@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon src/index.ts",
     "build": "tsc",
-    "test": "NODE_ENV=test cross-env TS_NODE_FILES=true mocha --exit --require ts-node/register --colors test/**/*.ts"
+    "test": "NODE_ENV=test cross-env TS_NODE_FILES=true mocha --exit --require ts-node/register --colors test/**/*.ts",
+    "coverage": "nyc npm run test"
   },
   "author": "Richard Ibarra",
   "license": "ISC",
