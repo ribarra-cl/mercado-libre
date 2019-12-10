@@ -1,13 +1,26 @@
-version: "3.1"
+# Dockerfile taken form
+# - https://github.com/HeberGB/example-typescript-docker
+# - https://github.com/aherve/typescript-express-docker
 
-services:
-  db:
-    container_name: mongoDB
-    image: mongo:latest
-    restart: always
-    volumes:
-      - ./data:/data/db
-    environment:
-      - MONGO_INITDB_DATABASE= MUTANTS
-    ports:
-      - 27017:27017
+web-server:
+  build: .
+  dockerfile: Dockerfile.dev
+  links:
+    - 'mongo:mongo'
+  environment:
+    NODE_ENV: 'development'
+  volumes:
+    - ./src:/app/src
+    - ./nodemon.json:/app/nodemon.json
+  expose:
+    - "8080"
+  ports:
+    - "8080:8080"
+    - "9229:9229"
+  command: npm start
+
+mongo:
+  image: mongo:latest
+  ports:
+    - "27017:27017"
+  command: ["mongod"]

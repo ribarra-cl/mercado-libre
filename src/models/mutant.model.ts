@@ -3,7 +3,9 @@
   Author. Richard Ibarra Ramírez - richard.ibarra@gmail.com
  */
 
-import mongoose, {Schema} from 'mongoose';
+
+import * as mongoose from "mongoose";
+
 const MutantSchema = new mongoose.Schema({
   dna: [String],
   isMutant: Boolean

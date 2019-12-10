@@ -3,27 +3,31 @@
   Author. Richard Ibarra Ramírez - richard.ibarra@gmail.com
  */
 
-import { expect } from 'chai';
-import chai = require('chai');
-import chaiHttp = require('chai-http');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-import {Application} from "express";
-import App from "../src/app";
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+import * as mongo from 'mongodb-memory-server';
+import app, { mongoConfig } from "../../src/app";
+import config from "../../src/config/environment";
 
 // setup chai for testing
 chai.use(chaiHttp);
 chai.should();
 
-describe('App server', () => {
+describe('APP /mutant/', () => {
 
-  let app: Application;
+  let mongod: mongo.MongoMemoryServer;
 
-  before(async() => {
+  before(async () => {
     // setup mongo in memory server
-    const mongod = new MongoMemoryServer();
-    const mongoURL = await mongod.getConnectionString();
+    mongod = new mongo.MongoMemoryServer();
+    const uri = await mongod.getConnectionString();
 
-    app = new App(mongoURL).app;
+    mongoConfig(uri, config.mongo.options);
+
+  });
+
+  after(async () => {
+    await mongod.stop();
   });
 
   describe('GET /', () => {
@@ -31,8 +35,8 @@ describe('App server', () => {
 
       chai.request(app)
         .get('/')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(200);
         })
 
     });
@@ -43,8 +47,8 @@ describe('App server', () => {
 
       chai.request(app)
         .get('/foo')
-        .end((err, res) => {
-          expect(res).to.have.status(404);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(404);
         })
 
     });
@@ -56,8 +60,8 @@ describe('App server', () => {
 
       chai.request(app)
         .get('/mutants/')
-        .end((err, res) => {
-          expect(res).to.have.status(405);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(405);
           done();
         })
     });
@@ -70,8 +74,8 @@ describe('App server', () => {
 
       chai.request(app)
         .post('/mutants/')
-        .end((err, res) => {
-          expect(res).to.have.status(403);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(403);
           done();
         })
     });
@@ -82,8 +86,8 @@ describe('App server', () => {
         .post('/mutants/')
         .set('content-type', 'application/json')
         .send({ foo: "bar"})
-        .end((err, res) => {
-          expect(res).to.have.status(403);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(403);
           done();
         })
     });
@@ -94,8 +98,8 @@ describe('App server', () => {
         .post('/mutants/')
         .set('content-type', 'application/json')
         .send({ dna: "ATCGCA"})
-        .end((err, res) => {
-          expect(res).to.have.status(403);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(403);
           done();
         })
     });
@@ -106,8 +110,8 @@ describe('App server', () => {
         .post('/mutants/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATCGCA"]})
-        .end((err, res) => {
-          expect(res).to.have.status(403);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(403);
           done();
         })
     });
@@ -118,8 +122,8 @@ describe('App server', () => {
         .post('/mutants/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATCGCA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]})
-        .end((err, res) => {
-          expect(res).to.have.status(403);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(403);
           done();
         })
     });
@@ -131,8 +135,8 @@ describe('App server', () => {
         .post('/mutants/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATCGCA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]})
-        .end((err, res) => {
-          expect(res).to.have.status(403);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(403);
           done();
         })
     });
@@ -144,8 +148,8 @@ describe('App server', () => {
         .post('/mutants/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]})
-        .end((err, res) => {
-          expect(res).to.have.status(200);
+        .end((err: Error, res: any) => {
+          chai.expect(res).to.have.status(200);
           done();
         })
     });

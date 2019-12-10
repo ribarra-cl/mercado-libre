@@ -8,42 +8,36 @@
  https://dev.to/nyagarcia/pokeapi-rest-in-nodejs-with-express-typescript-mongodb-and-docker-part-1-5f8g
  */
 
-import express, { Application } from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import {MutantsController} from "./mutants.controller";
-import {MONGO_URL} from "./constants/mutants.contants";
+import * as express from "express"
+import * as http from 'http'
+import * as mongoose from 'mongoose'
+import config from './config/environment'
+import expressConfig from './config/express'
+import routesConfig from './routes'
 
-export default class App {
-  public app: Application;
+// Set default node environment to development
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-  public mutantsController: MutantsController;
+// setup server and expose
+const app: express.Application = express();
+const server = http.createServer(app);
 
-  constructor(mongoURL: string) {
-    this.app = express();
-    this.setConfig();
-    this.setupMongo(mongoURL);
+expressConfig(app);
+routesConfig(app);
 
-    // setup mutants controllers to handle requests
-    this.mutantsController = new MutantsController(this.app);
-  }
+// connect to database after listen
+// required because of tests
+export const mongoConfig = (uri: string, options: mongoose.ConnectionOptions) => {
+  mongoose.connect(uri, options);
+};
 
-  private setConfig() {
-    //Allows us to receive requests with data in json format
-    this.app.use(bodyParser.json({ limit: '50mb' }));
-
-    //Allows us to receive requests with data in x-www-form-urlencoded format
-    this.app.use(bodyParser.urlencoded({ limit: '50mb', extended:true}));
-
-    //Enables cors
-    this.app.use(cors());
-  }
-
-  private setupMongo(mongoURL: string) {
-    mongoose.Promise = global.Promise;
-    mongoose.connect(mongoURL, {
-      useNewUrlParser: true
-    });
-  }
+// start server as fx
+export const listen = () => {
+  server.listen(config.port, config.ip, () => {
+    console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+  });
 }
+
+
+// Expose app
+export default app;
