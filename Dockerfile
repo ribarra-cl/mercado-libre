@@ -1,6 +1,7 @@
-FROM node:10.15.3-alpine
+FROM node:latest
 
-WORKDIR /home/node/app
+RUN mkdir /app
+WORKDIR /app
 ADD . .
 
 ENV NODE_ENV=production
@@ -8,6 +9,6 @@ RUN npm ci
 
 USER node
 
-EXPOSE 8080
+EXPOSE 80
 
-CMD [ "node", "build/index.js" ]
+CMD [ "node", "dist/index.js" ]

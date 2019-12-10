@@ -1,0 +1,1 @@
+{"version":3,"file":"mutant.model.js","sourceRoot":"","sources":["../../src/models/mutant.model.ts"],"names":[],"mappings":";;AAMA,qCAAqC;AAErC,MAAM,YAAY,GAAG,IAAI,QAAQ,CAAC,MAAM,CAAC;IACvC,GAAG,EAAE,CAAC,MAAM,CAAC;IACb,QAAQ,EAAE,OAAO;CAClB,EAAE;IACD,UAAU,EAAE,IAAI;CACjB,CAAC,CAAC;AAEU,QAAA,WAAW,GAAG,QAAQ,CAAC,KAAK,CAAC,SAAS,EAAE,YAAY,CAAC,CAAC"}
