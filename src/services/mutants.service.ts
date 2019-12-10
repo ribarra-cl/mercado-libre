@@ -6,7 +6,8 @@
 import { Request, Response } from "express";
 import {isMutant} from "../mutants";
 import {APP_NAME} from "../constants/mutants.contants";
-import {MutantModel} from "../models/mutant.model";
+import {calculateStats, MutantModel} from "../models/mutant.model";
+import { CacheModel} from "../models/cache.model";
 import {MongooseDocument} from "mongoose";
 
 export class MutantsService {
@@ -24,7 +25,7 @@ export class MutantsService {
     res.status(405).send('');
   }
 
-  public post(req: Request, res: Response) {
+  public async post(req: Request, res: Response) {
 
     /*
       dna: string[]
@@ -35,38 +36,53 @@ export class MutantsService {
       403: otherwise
      */
 
-    let isMutantDNA = false;
-    let dna: string[];
-    if(req.body.dna)
-    {
-      dna = req.body.dna;
-      isMutantDNA = isMutant(dna);
+    try {
 
-      const data = {
-        dna: req.body.dna,
-        isMutant: isMutantDNA
-      }
+      let isMutantDNA = false;
+      let dna: string[];
+      if (req.body.dna) {
+        dna = req.body.dna;
+        isMutantDNA = isMutant(dna);
 
-      const mutant = new MutantModel(data);
-      mutant.save((error: Error, mutantDocument: MongooseDocument) => {
-        if(error) {
-          // error saving model, send corresponding error
-          res.status(500).send(error);
+        const data = {
+          dna: req.body.dna,
+          isMutant: isMutantDNA
+        }
+
+        // save request register
+        const mutant = new MutantModel(data);
+        const doc = await mutant.save();
+
+        // recalculate cache
+        const stats = await calculateStats();
+        let cache = await CacheModel.findOne({});
+        if(cache == null)
+        {
+          await new CacheModel(stats).save();
         }
         else
         {
-          if(isMutantDNA)
-          {
-            res.status(200).json(mutantDocument);
-          }
-          else
-          {
-            res.status(403).send();
-          }
+          await CacheModel.update({
+            _id: cache._id
+          }, stats);
         }
-      });
-    } else {
-      return res.status(403).send();
+
+        if(isMutantDNA)
+        {
+          return res.status(200).json(doc);
+        }
+        else
+        {
+          return res.status(403).send();
+        }
+
+      } else {
+        return res.status(403).send();
+      }
+    } catch(err)
+    {
+      // error saving model, send corresponding error
+      return res.status(500).send(err);
     }
   }
 }

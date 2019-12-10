@@ -4,12 +4,16 @@
  */
 
 import {Request, Response} from "express";
-import {MutantModel} from "../models/mutant.model";
-import StatInterface from "../interfaces/stat.interface";
+import {calculateStats} from "../models/mutant.model";
+import {CacheModel} from "../models/cache.model";
 
 export class StatsService {
 
-  public index(req: Request, res: Response) {
+  constructor() {
+    this.index = this.index.bind(this);
+  }
+
+  public async index(req: Request, res: Response) {
     /*
      GET /stats/
      -> returns json
@@ -19,32 +23,16 @@ export class StatsService {
       "ratio": 0.4
      }
      */
-    MutantModel
-      .aggregate([
-        {
-          $group: {
-            _id: '$isMutant',
-            count: {
-              $sum: 1
-            }
-          }
-        }], (error: Error, docs: any[]) => {
 
-        const mutants = docs.find((item: any) => item._id === true);
-        const humans =  docs.find((item: any) => item._id === false);
+    let cache = await CacheModel.findOne({});
+    if(cache == null)
+    {
+      // no register was found, create a new one
+      const stats = await calculateStats();
+      cache = await CacheModel.create(stats);
+    }
 
-        const count_mutant_dna = mutants ? mutants.count : 0;
-        const count_human_dna = humans ? humans.count : 0;
-
-        // if not humans requests have been registered => set ratio to 0 to avoid division by 0
-        const ratio = count_human_dna > 0 ? count_mutant_dna / count_human_dna : 0;
-        const stats: StatInterface = {
-          count_mutant_dna,
-          count_human_dna,
-          ratio
-        }
-        res.status(200).json(stats);
-      });
+    res.status(200).json(cache);
   }
 
 }

@@ -13,8 +13,8 @@ const routes = (app: express.Application): void => {
   const statsService = new StatsService();
 
   app.route('/').get(mutantsService.root);
-  app.route('/mutants/').get(mutantsService.get);
-  app.route('/mutants/').post(mutantsService.post);
+  app.route('/mutant/').get(mutantsService.get);
+  app.route('/mutant/').post(mutantsService.post);
   app.route('/stats').get(statsService.index);
 
   // All other routes should 404

@@ -3,6 +3,7 @@
 # - https://github.com/aherve/typescript-express-docker
 
 web-server:
+  dockerfile: Dockerfile.dev
   volumes:
     - ./src:/app/src
     - ./nodemon.json:/app/nodemon.json

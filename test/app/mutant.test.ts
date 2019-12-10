@@ -54,12 +54,12 @@ describe('APP /mutant/', () => {
     });
   });
 
-  describe('GET /mutants/', () => {
+  describe('GET /mutant/', () => {
 
     it('GET /mutants/ should return method not allowed', (done) => {
 
       chai.request(app)
-        .get('/mutants/')
+        .get('/mutant/')
         .end((err: Error, res: any) => {
           chai.expect(res).to.have.status(405);
           done();
@@ -73,7 +73,7 @@ describe('APP /mutant/', () => {
     it('invalid data format', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .end((err: Error, res: any) => {
           chai.expect(res).to.have.status(403);
           done();
@@ -83,7 +83,7 @@ describe('APP /mutant/', () => {
     it('key not found', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({ foo: "bar"})
         .end((err: Error, res: any) => {
@@ -95,7 +95,7 @@ describe('APP /mutant/', () => {
     it('invalid dna format: string', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({ dna: "ATCGCA"})
         .end((err: Error, res: any) => {
@@ -107,7 +107,7 @@ describe('APP /mutant/', () => {
     it('invalid dna format: not matching length', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATCGCA"]})
         .end((err: Error, res: any) => {
@@ -119,7 +119,7 @@ describe('APP /mutant/', () => {
     it('not mutant matrix should return status 403', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATCGCA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]})
         .end((err: Error, res: any) => {
@@ -132,7 +132,7 @@ describe('APP /mutant/', () => {
     it('not mutant matrix should return status 403', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATCGCA","CAGTGC","TTATTT","AGACGG","GCGTCA","TCACTG"]})
         .end((err: Error, res: any) => {
@@ -145,7 +145,7 @@ describe('APP /mutant/', () => {
     it('valid mutant matrix should return status 200', (done) => {
 
       chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({ dna: ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"]})
         .end((err: Error, res: any) => {

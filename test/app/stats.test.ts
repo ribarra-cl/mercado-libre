@@ -43,7 +43,7 @@ describe('APP /stats', () => {
       chai.expect(res.body).to.have.property('ratio').to.be.equal(0);
 
       await chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({dna: VALID_MATRICES.sample_1});
 
@@ -55,7 +55,7 @@ describe('APP /stats', () => {
       chai.expect(res.body).to.have.property('ratio').to.be.equal(0);
 
       await chai.request(app)
-        .post('/mutants/')
+        .post('/mutant/')
         .set('content-type', 'application/json')
         .send({dna: INVALID_MATRICES.sample_0});
 
