@@ -1,0 +1,11 @@
+FROM node:latest
+
+RUN mkdir /app
+WORKDIR /app
+
+ADD ./package*.json ./
+RUN npm i
+
+ENV NODE_ENV=development
+
+USER node

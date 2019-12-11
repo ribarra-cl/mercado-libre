@@ -1,0 +1,16 @@
+# Dockerfile taken form
+# - https://github.com/HeberGB/example-typescript-docker
+# - https://github.com/aherve/typescript-express-docker
+
+web-server:
+  volumes:
+    - ./dist:/app/dist/
+  environment:
+    - NODE_ENV=production
+  command: node /app/dist/index.js
+
+mongo:
+  image: mongo:latest
+  ports:
+    - "27017:27017"
+  command: ["mongod"]

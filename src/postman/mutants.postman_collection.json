@@ -1,0 +1,96 @@
+{
+	"info": {
+		"_postman_id": "5ad29186-41bc-4aff-82b8-f3bd0d81be01",
+		"name": "mutants",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "valid mutant matrix",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4b505108-5531-41e7-bd4f-2671747581a5",
+						"exec": [
+							"pm.test(\"valid mutant matrix returns status 200\", function () {",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(pm.response.body).to.be.undefined;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dna\": [\"ATGCGA\",\"CAGTGC\",\"TTATGT\",\"AGAAGG\",\"CCCCTA\",\"TCACTG\"]\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/mutants/",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"mutants",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "not mutant matrix",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4b505108-5531-41e7-bd4f-2671747581a5",
+						"exec": [
+							"pm.test(\"valid mutant matrix returns status 200\", function () {",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(pm.response.body).to.be.undefined;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"dna\": [\"AT\", \"A\"]\n}"
+				},
+				"url": {
+					"raw": "{{HOST}}/mutants/",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"mutants",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

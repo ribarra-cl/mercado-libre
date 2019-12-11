@@ -1,0 +1,19 @@
+# Dockerfile taken form
+# - https://github.com/HeberGB/example-typescript-docker
+# - https://github.com/aherve/typescript-express-docker
+
+web-server:
+  build: .
+  links:
+    - 'mongo:mongo'
+  expose:
+    - "8080"
+  ports:
+    - "8080:8080"
+    - "9229:9229"
+
+mongo:
+  image: mongo:latest
+  ports:
+    - "27017:27017"
+  command: ["mongod"]

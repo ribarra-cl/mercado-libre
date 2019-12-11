@@ -1,0 +1,16 @@
+# Dockerfile taken form
+# - https://github.com/HeberGB/example-typescript-docker
+# - https://github.com/aherve/typescript-express-docker
+
+web-server:
+  dockerfile: Dockerfile.dev
+  volumes:
+    - ./src:/app/src
+    - ./nodemon.json:/app/nodemon.json
+  command: npm start
+
+mongo:
+  image: mongo:latest
+  ports:
+    - "27017:27017"
+  command: ["mongod"]
