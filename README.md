@@ -9,6 +9,8 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 Puedes acceder a la aplicación a través del browser mediante la url http://localhost:8080/
 
+_Cualquier_ cambio hecho en los archivos .ts actualizará automáticamente el servidor de desarrollo.
+
 # 2 Tests
 Los tests pueden ser corridos instalando los paquetes localmente
 
