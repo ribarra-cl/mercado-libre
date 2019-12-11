@@ -6,6 +6,7 @@
 
 import * as mongoose from "mongoose";
 import StatInterface from "../interfaces/stat.interface";
+import {IMutant} from "../interfaces/mutant.interface";
 
 const MutantSchema = new mongoose.Schema({
   dna: [String],
@@ -14,7 +15,7 @@ const MutantSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export const MutantModel = mongoose.model('mutants', MutantSchema);
+export const MutantModel = mongoose.model<IMutant>('mutants', MutantSchema);
 
 //TODO: find another better place for fx
 export const calculateStats = async (): Promise<StatInterface> => {

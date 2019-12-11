@@ -9,8 +9,14 @@ import {APP_NAME} from "../constants/mutants.contants";
 import {calculateStats, MutantModel} from "../models/mutant.model";
 import { CacheModel} from "../models/cache.model";
 import {MongooseDocument} from "mongoose";
+import {IMutant} from "../interfaces/mutant.interface";
 
 export class MutantsService {
+
+  constructor() {
+    this.send = this.send.bind(this);
+    this.post = this.post.bind(this);
+  }
 
   public root(req: Request, res: Response)
   {
@@ -23,6 +29,20 @@ export class MutantsService {
   {
     // -> returns method not allowed
     res.status(405).send('');
+  }
+
+  private send(res: Response, mutant: IMutant)
+  {
+    if(mutant.isMutant)
+    {
+      // register is mutant, return data and 200 code
+      return res.status(200).json(mutant);
+    }
+    else
+    {
+      // register is not mutant, returns 403
+      return res.status(403).send();
+    }
   }
 
   public async post(req: Request, res: Response) {
@@ -49,9 +69,13 @@ export class MutantsService {
           isMutant: isMutantDNA
         }
 
+        // check if register exists
+        const register = await MutantModel.findOne({ dna });
+        if(register) // register already exists
+          return this.send(res, register);
+
         // save request register
-        const mutant = new MutantModel(data);
-        const doc = await mutant.save();
+        const mutant = await new MutantModel(data).save();
 
         // recalculate cache
         const stats = await calculateStats();
@@ -67,14 +91,7 @@ export class MutantsService {
           }, stats);
         }
 
-        if(isMutantDNA)
-        {
-          return res.status(200).json(doc);
-        }
-        else
-        {
-          return res.status(403).send();
-        }
+        return this.send(res, mutant);
 
       } else {
         return res.status(403).send();
