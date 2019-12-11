@@ -6,8 +6,8 @@ const routes = (app) => {
     const mutantsService = new mutants_service_1.MutantsService();
     const statsService = new stats_service_1.StatsService();
     app.route('/').get(mutantsService.root);
-    app.route('/mutants/').get(mutantsService.get);
-    app.route('/mutants/').post(mutantsService.post);
+    app.route('/mutant/').get(mutantsService.get);
+    app.route('/mutant/').post(mutantsService.post);
     app.route('/stats').get(statsService.index);
     app.route('/*')
         .get((req, res) => {
